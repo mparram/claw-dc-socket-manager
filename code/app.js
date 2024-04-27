@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const https = require('https');
+const fs = require('fs');
 const clientCACert = 'certs/clientCA.crt';
 const serverKey = 'certs/server.key';
 const serverCert = 'certs/server.crt';

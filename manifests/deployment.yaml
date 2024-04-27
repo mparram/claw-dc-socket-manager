@@ -43,7 +43,7 @@ spec:
           imagePullPolicy: Always
           terminationMessagePolicy: File
           image: >-
-            quay.io/mparrade/dc-socket-manager:latest
+            quay.io/mparrade/claw-dc-socket-manager:latest
       dnsPolicy: ClusterFirst
   strategy:
     type: RollingUpdate
