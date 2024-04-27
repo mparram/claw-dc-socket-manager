@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+var env = require('dotenv').config();
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
@@ -7,6 +8,7 @@ const clientCACert = 'certs/clientCA.crt';
 const serverKey = 'certs/server.key';
 const serverCert = 'certs/server.crt';
 const { Server } = require("socket.io");
+const KEY_PASSPHRASE = process.env.KEY_PASSPHRASE || "";
 const io = Server(https.createServer({
   key: fs.readFileSync(serverKey),
   passphrase: KEY_PASSPHRASE,
