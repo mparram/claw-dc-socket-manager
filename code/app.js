@@ -9,14 +9,16 @@ const serverKey = 'certs/server.key';
 const serverCert = 'certs/server.crt';
 const { Server } = require("socket.io");
 const KEY_PASSPHRASE = process.env.KEY_PASSPHRASE || "";
+const port = process.env.PORT || 8080;
+const uiport = process.env.UI_PORT || 8081;
 const io = Server(https.createServer({
   key: fs.readFileSync(serverKey),
   passphrase: KEY_PASSPHRASE,
   cert: fs.readFileSync(serverCert),
   ca: fs.readFileSync(clientCACert),
   requestCert: true
-}).listen(WS_PORT, () => {
-  console.log(`WebSocket Server listening on port${WS_PORT}`);
+}).listen(port, () => {
+  console.log(`WebSocket Server listening on port${port}`);
 }));
 
 
@@ -24,8 +26,7 @@ const io = Server(https.createServer({
 const uiServer = http.createServer(app);
 
 const uiIo = new Server(uiServer);
-const port = process.env.PORT || 8080;
-const uiport = process.env.UI_PORT || 8081;
+
 var uisocket = "";
 var connsocket = "";
 io.on('connection', (socket) => {
@@ -40,9 +41,6 @@ io.on('connection', (socket) => {
       }
     });
   });
-server.listen(port, () => {
-  console.log('Server listening on *:' + port);
-});
 
 uiIo.on('connection', (socket) => {
     uisocket = socket;
