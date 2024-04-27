@@ -11,7 +11,7 @@ const { Server } = require("socket.io");
 const KEY_PASSPHRASE = process.env.KEY_PASSPHRASE || "";
 const port = process.env.PORT || 8080;
 const uiport = process.env.UI_PORT || 8081;
-const io = Server(https.createServer({
+const io = new Server(https.createServer({
   key: fs.readFileSync(serverKey),
   passphrase: KEY_PASSPHRASE,
   cert: fs.readFileSync(serverCert),
