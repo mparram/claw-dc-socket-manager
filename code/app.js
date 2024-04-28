@@ -12,10 +12,10 @@ const KEY_PASSPHRASE = process.env.KEY_PASSPHRASE || "";
 const port = process.env.PORT || 8080;
 const uiport = process.env.UI_PORT || 8081;
 const io = new Server(https.createServer({
-  key: fs.readFileSync(serverKey),
+  key: fs.readFileSync(serverKey, 'utf-8'),
   passphrase: KEY_PASSPHRASE,
-  cert: fs.readFileSync(serverCert),
-  ca: fs.readFileSync(clientCACert),
+  cert: fs.readFileSync(serverCert, 'utf-8'),
+  ca: [fs.readFileSync(clientCACert, 'utf-8')],
   requestCert: true
 }).listen(port, () => {
   console.log(`WebSocket Server listening on port${port}`);
