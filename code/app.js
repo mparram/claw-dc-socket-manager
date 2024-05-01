@@ -50,6 +50,9 @@ uiIo.on('connection', (socket) => {
         console.log("emit control: " + control + " act: " + act)
         connsocket.emit("control", control, act);
       });
+      socket.on("panic", () => {
+        connsocket.emit("panic");
+      });
       socket.on("user_on", (status) => {
         connsocket.emit("user_on", status);
       });
