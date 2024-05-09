@@ -40,6 +40,9 @@ io.on('connection', (socket) => {
         uiIo.emit("video", data);
       }
     });
+    socket.on('color', (data) => {
+      uiIo.emit("color", data);
+    });
   });
 
 uiIo.on('connection', (socket) => {
