@@ -11,6 +11,8 @@ const { Server } = require("socket.io");
 const KEY_PASSPHRASE = process.env.KEY_PASSPHRASE || "";
 const port = process.env.PORT || 8080;
 const uiport = process.env.UI_PORT || 8081;
+var uisocket = "";
+var connsocket = "";
 const io = new Server(https.createServer({
   key: fs.readFileSync(serverKey, 'utf-8'),
   passphrase: KEY_PASSPHRASE,
@@ -27,8 +29,7 @@ const uiServer = http.createServer(app);
 
 const uiIo = new Server(uiServer);
 
-var uisocket = "";
-var connsocket = "";
+
 io.on('connection', (socket) => {
     connsocket = socket;
     console.log('IO: a user connected');
@@ -47,32 +48,29 @@ io.on('connection', (socket) => {
     io.on('disconnect', () => {
       connsocket = "";
       console.log('device disconnected');
-    }
-    );
-  });
+    });
+});
 
 
 uiIo.on('connection', (socket) => {
     uisocket = socket;
-    console.log('uiIO: a user connected');
-    if (connsocket != ""){
-      socket.on("control", (control, act) => {
-        console.log("emit control: " + control + " act: " + act)
-        connsocket.emit("control", control, act);
-      });
-      uisocket.on("panic", () => {
-        connsocket.emit("panic");
-      });
-      uisocket.on("user_on", (status) => {
-        console.log("emit user_on: " + status);
-        connsocket.emit("user_on", status);
-      });
-    }
+    console.log('uiIO: front connected');
+    socket.on("control", (control, act) => {
+      console.log("emit control: " + control + " act: " + act)
+      connsocket.emit("control", control, act);
+    });
+    uisocket.on("panic", () => {
+      connsocket.emit("panic");
+    });
+    uisocket.on("user_on", (status) => {
+      console.log("emit user_on: " + status);
+      connsocket.emit("user_on", status);
+    });
     uisocket.on('disconnect', () => {
       uisocket = "";
       console.log('front disconnected');
     });
-  });
+});
 uiServer.listen(uiport, () => {
   console.log('UIServer listening on *:' + uiport);
 });
