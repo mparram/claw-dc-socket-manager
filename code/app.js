@@ -41,6 +41,7 @@ io.on('connection', (socket) => {
       }
     });
     socket.on('color', (data) => {
+      console.log("color: " + data);
       uiIo.emit("color", data);
     });
   });
