@@ -32,19 +32,25 @@ var connsocket = "";
 io.on('connection', (socket) => {
     connsocket = socket;
     console.log('IO: a user connected');
-    socket.on('disconnect', () => {
+    connsocket.on('disconnect', () => {
       console.log('user disconnected');
     });
-    socket.on('video', (data) => {
+    connsocket.on('video', (data) => {
       if (uiIo.sockets.sockets != "") {
         uiIo.emit("video", data);
       }
     });
-    socket.on('color', (data) => {
+    connsocket.on('color', (data) => {
       console.log("color: " + data);
       uiIo.emit("color", data);
     });
+    io.on('disconnect', () => {
+      connsocket = "";
+      console.log('device disconnected');
+    }
+    );
   });
+
 
 uiIo.on('connection', (socket) => {
     uisocket = socket;
@@ -54,17 +60,17 @@ uiIo.on('connection', (socket) => {
         console.log("emit control: " + control + " act: " + act)
         connsocket.emit("control", control, act);
       });
-      socket.on("panic", () => {
+      uisocket.on("panic", () => {
         connsocket.emit("panic");
       });
-      socket.on("user_on", (status) => {
+      uisocket.on("user_on", (status) => {
         console.log("emit user_on: " + status);
         connsocket.emit("user_on", status);
       });
     }
-    socket.on('disconnect', () => {
+    uisocket.on('disconnect', () => {
       uisocket = "";
-      console.log('user disconnected');
+      console.log('front disconnected');
     });
   });
 uiServer.listen(uiport, () => {
